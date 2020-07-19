@@ -5,9 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    addModalTogller:false, 
-    addLinkTogller:false,
-    addSubGroupTogller:false,     
+    addModalToggler:false, 
+    addLinkToggler:false,
+    addSubGroupToggler:false,     
     iconArray:[
       {icon:'mdi-youtube', type:'fab', awesUnic:'&#xf167;'},
       {icon:'mdi-spotify', type:'fab', awesUnic:'&#xf1bc;'},
@@ -38,28 +38,22 @@ export default new Vuex.Store({
     iconArray: state =>{
       return state.iconArray;
     },
-    addModalTogller: state =>{
-      return state.addModalTogller;
+    addModalToggler: state =>{
+      return state.addModalToggler;
     },
-    addLinkTogller: state =>{
-      return state.addLinkTogller;
-    },
-    addSubGroupTogller: state =>{
-      return state.addSubGroupTogller;
-    },
+    addLinkToggler: state =>{
+      return state.addLinkToggler;
+    },    
     groupCol: state =>{
       return state.groupCol;
     },   
   },
   mutations: {
-    addModalToglle: state =>{
-      state.addModalTogller = !state.addModalTogller;
-    },
-    addSubGroupToglle: state =>{
-      state.addSubGroupTogller = !state.addSubGroupTogller;
-    },
-    addLinkToglle: state =>{
-      state.addLinkTogller = !state.addLinkTogller;
+    addModalToggle: state =>{
+      state.addModalToggler = !state.addModalToggler;
+    },    
+    addLinkToggle: state =>{
+      state.addLinkToggler = !state.addLinkToggler;
     }    
   },
   actions: {   

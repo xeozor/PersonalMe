@@ -1,5 +1,5 @@
 <template>
-  <v-dialog content-class="dialog-neon" v-model="addLinkTogller"
+  <v-dialog content-class="dialog-neon" v-model="addLinkToggler"
    overlay-color="#000000" overlay-opacity="0.85">
      
         <v-form class="form-modal d-flex align-center flex-column pb-5 primary"> 
@@ -44,7 +44,7 @@ export default {
       icon: this.currentLinkIcon,
       title: this.linkTitleTextInput
     })
-    this.$store.commit('addLinkToglle');        
+    this.$store.commit('addLinkToggle');        
     },
     setCurrentLinkIc(ic){
       this.currentLinkIcon = ic;
@@ -52,7 +52,7 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'addLinkTogller',
+      'addLinkToggler',
       'iconArray'
     ])    
   }

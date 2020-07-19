@@ -2,11 +2,11 @@
   <div class="main secondary"> 
     <navbar></navbar> 
 
-    <v-btn @click="addModalToglle" v-if="!VissibleSwitch" key="AddModalToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
+    <v-btn @click="addModalToggle" v-if="!VissibleSwitch" key="AddModalToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
       <v-icon class="add-modal-icon white--text">mdi-plus</v-icon>     
     </v-btn>
 
-    <v-btn @click="addLinkToglle" v-if="VissibleSwitch" key="AddLinkToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
+    <v-btn @click="addLinkToggle" v-if="VissibleSwitch" key="AddLinkToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
       <v-icon class="add-modal-icon white--text">mdi-minus</v-icon>     
     </v-btn>
 
@@ -25,7 +25,7 @@
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
       <li v-for="link in subGroupArr" :key="link.groupId" 
        class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
-        <v-icon class="white--text group-icon">{{link.icon}}</v-icon>
+        <v-icon class="white--text link-icon">{{link.icon}}</v-icon>
         <p class="group-title text-center pt-lg-3 pb-lg-0">{{link.title}}</p>
       </li>
       </v-list>
@@ -58,9 +58,9 @@ export default {
       db: this.$firebase.firestore(), 
       fv: this.$firebase.firestore.FieldValue,
       currentIcon:'mdi-youtube',
-      titleTextInput:'', 
-      subGroupArr:null,  
+      titleTextInput:'',         
       currentGroup:'',
+      subGroupArr:null,
       VissibleSwitch:false,
       groupSwitch:true,
     }
@@ -72,11 +72,11 @@ export default {
     ])    
   },
   methods:{   
-    addModalToglle(){
-      this.$store.commit('addModalToglle');
+    addModalToggle(){
+      this.$store.commit('addModalToggle');
     },    
     addLinkToggle(){
-      this.$store.commit('addLinkToglle');
+      this.$store.commit('addLinkToggle');
     },
     addGroup(){
       this.db.collection("Group").add({
@@ -84,7 +84,7 @@ export default {
       icon: this.currentIcon,
       title: this.titleTextInput
     })
-    this.$store.commit('addModalToglle');        
+    this.$store.commit('addModalToggle');        
     },    
     moveToGroup(groupId){
       this.db.collection('Group').doc(groupId).get().then(doc =>{        

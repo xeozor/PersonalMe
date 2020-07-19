@@ -1,5 +1,5 @@
 <template>
-  <v-dialog content-class="dialog-neon" v-model="addModalTogller"
+  <v-dialog content-class="dialog-neon" v-model="addModalToggler"
    overlay-color="#000000" overlay-opacity="0.85">
      
         <v-form class="form-modal d-flex align-center flex-column pb-5 primary"> 
@@ -45,7 +45,7 @@ export default {
       icon: this.currentIcon,
       title: this.titleTextInput
     })
-    this.$store.commit('addModalToglle');        
+    this.$store.commit('addModalToggle');        
     },
     setCurrent(ic){
       this.currentIcon = ic;
@@ -53,7 +53,7 @@ export default {
   },
   computed:{
     ...mapGetters([
-      'addModalTogller',
+      'addModalToggler',
       'iconArray'
     ])    
   }
