@@ -1,10 +1,16 @@
 <template>
   <div class="main secondary"> 
-    <navbar></navbar>     
-    <v-btn @click="addModalToglle" :v-show="!VissibleSwitch" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
+    <navbar></navbar> 
+
+    <v-btn @click="addModalToglle" v-if="!VissibleSwitch" key="AddModalToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
       <v-icon class="add-modal-icon white--text">mdi-plus</v-icon>     
     </v-btn>
-    <v-col :v-show="!VissibleSwitch" class="link-container mx-auto"> 
+
+    <v-btn @click="addLinkToglle" v-if="VissibleSwitch" key="AddLinkToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
+      <v-icon class="add-modal-icon white--text">mdi-minus</v-icon>     
+    </v-btn>
+
+    <v-col v-if="!VissibleSwitch" class="link-container mx-auto" key="linkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
       <li v-for="group in groupCol" :key="group.groupId" @click="moveToGroup(group.groupId)"
        class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
@@ -15,7 +21,7 @@
     </v-col> 
     <add-modal></add-modal>
 
-    <v-col :v-show="VissibleSwitch" class="link-container mx-auto"> 
+    <v-col v-if="VissibleSwitch" class="link-container mx-auto" key="currentLinkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
       <li v-for="link in subGroupArr" :key="link.groupId" 
        class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
@@ -23,28 +29,11 @@
         <p class="group-title text-center pt-lg-3 pb-lg-0">{{link.title}}</p>
       </li>
       </v-list>
-    </v-col>    
+    </v-col>
 
-    <v-dialog content-class="dialog-neon" v-model="addSubGroupTogller"
-    overlay-color="#000000" overlay-opacity="0.85">
+    <add-linkm></add-linkm>   
+
      
-      <v-form class="form-modal d-flex align-center flex-column pb-5 primary"> 
-        <v-container class="d-flex align-center primary">                       
-          <v-container class="preview-container d-flex flex-column align-center" dark>            
-            <h1 class="white--text">Shiiit</h1>
-            <v-icon class="preview-icon">{{currentIcon}}</v-icon>
-            <p class="input-title white--text">{{titleTextInput}}</p>            
-            <input id="icon-text-input" type="text" placeholder="Set a name" v-model="titleTextInput" />
-          </v-container>
-          <v-container class="icon-container secondary">
-            <span class="icon-box primary" v-for="icon in iconArray" :key="icon.icon" @click="setCurrent(icon.icon)">
-              <v-icon class="icon-choose primary">{{icon.icon}}</v-icon>
-            </span>  
-          </v-container>  
-        </v-container>          
-          <v-btn @click="addGroup" class="add-group-btn primary">Add group</v-btn>                      
-      </v-form>  
-    </v-dialog>  
  
   </div>
 </template>
@@ -54,12 +43,14 @@
 import navbar from '@/components/Navbar.vue'
 import addModal from '@/components/addModal.vue'
 import { mapGetters } from 'vuex'
+import addLinkm from '@/components/addlinkm.vue'
 
 export default {
   name: 'Home',
   components: {
    navbar,
-   addModal,   
+   addModal, 
+   addLinkm  
   },
   data() {
     return{
@@ -77,15 +68,15 @@ export default {
   computed:{
     ...mapGetters([      
       'iconArray',
-      'addSubGroupTogller',
+      'addLinkToggler',
     ])    
   },
   methods:{   
     addModalToglle(){
       this.$store.commit('addModalToglle');
     },    
-    addSubGroupToglle(){
-      this.$store.commit('addSubGroupToglle');
+    addLinkToggle(){
+      this.$store.commit('addLinkToglle');
     },
     addGroup(){
       this.db.collection("Group").add({
@@ -94,10 +85,7 @@ export default {
       title: this.titleTextInput
     })
     this.$store.commit('addModalToglle');        
-    },
-    setCurrent(ic){
-      this.currentIcon = ic;
-    },
+    },    
     moveToGroup(groupId){
       this.db.collection('Group').doc(groupId).get().then(doc =>{        
         this.subGroupArr = doc.data().groupLinks;                

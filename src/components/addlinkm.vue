@@ -1,22 +1,22 @@
 <template>
-  <v-dialog content-class="dialog-neon" v-model="addModalTogller"
+  <v-dialog content-class="dialog-neon" v-model="addLinkTogller"
    overlay-color="#000000" overlay-opacity="0.85">
      
         <v-form class="form-modal d-flex align-center flex-column pb-5 primary"> 
           <v-container class="d-flex align-center primary">                       
           <v-container class="preview-container d-flex flex-column align-center" dark>            
             <h1 class="white--text">Preview:</h1>
-            <v-icon class="preview-icon">{{currentIcon}}</v-icon>
-            <p class="input-title white--text">{{titleTextInput}}</p>            
-            <input id="icon-text-input" type="text" placeholder="Set a name" v-model="titleTextInput" />
+            <v-icon class="preview-icon">{{currentLinkIcon}}</v-icon>
+            <p class="input-title white--text">{{linkTitleTextInput}}</p>            
+            <input id="icon-text-input" type="text" placeholder="Set a name" v-model="linkTitleTextInput" />
           </v-container>
           <v-container class="icon-container secondary">
-            <span class="icon-box primary mx-2" v-for="icon in iconArray" :key="icon.icon" @click="setCurrent(icon.icon)">
+            <span class="icon-box primary mx-2" v-for="icon in iconArray" :key="icon.icon" @click="setCurrentLinkIc(icon.icon)">
               <v-icon class="icon-choose primary my-1">{{icon.icon}}</v-icon>
             </span>  
           </v-container>  
           </v-container>          
-          <v-btn @click="addGroup" class="add-group-btn primary">Add group</v-btn>                      
+          <v-btn @click="addLink" class="add-group-btn primary">Add Link</v-btn>                      
         </v-form> 
                  
         
@@ -32,28 +32,27 @@ import { mapGetters } from 'vuex'
 export default {
   data(){
     return{
-      currentIcon:'mdi-youtube',
-      titleTextInput:'',
+      currentLinkIcon:'mdi-youtube',
+      linkTitleTextInput:'',
       db: this.$firebase.firestore(), 
       fv: this.$firebase.firestore.FieldValue,
     }
   },
   methods:{
-    addGroup(){
-      this.db.collection("Group").add({
-      groupLinks:[],
-      icon: this.currentIcon,
-      title: this.titleTextInput
+    addLink(){
+      this.db.collection("Group").add({      
+      icon: this.currentLinkIcon,
+      title: this.linkTitleTextInput
     })
-    this.$store.commit('addModalToglle');        
+    this.$store.commit('addLinkToglle');        
     },
-    setCurrent(ic){
-      this.currentIcon = ic;
+    setCurrentLinkIc(ic){
+      this.currentLinkIcon = ic;
     }
   },
   computed:{
     ...mapGetters([
-      'addModalTogller',
+      'addLinkTogller',
       'iconArray'
     ])    
   }
@@ -110,7 +109,7 @@ export default {
 }
 .add-group-btn{
   box-shadow: 0px 0px 35px rgba(32, 242, 91, 0.53)!important;
-  border-radius: 20px!important;
+  border-radius: 20px!important;  
 }
 </style>
 <style>

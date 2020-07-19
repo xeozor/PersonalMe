@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     addModalTogller:false, 
+    addLinkTogller:false,
     addSubGroupTogller:false,     
     iconArray:[
       {icon:'mdi-youtube', type:'fab', awesUnic:'&#xf167;'},
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     addModalTogller: state =>{
       return state.addModalTogller;
     },
+    addLinkTogller: state =>{
+      return state.addLinkTogller;
+    },
     addSubGroupTogller: state =>{
       return state.addSubGroupTogller;
     },
@@ -53,7 +57,10 @@ export default new Vuex.Store({
     },
     addSubGroupToglle: state =>{
       state.addSubGroupTogller = !state.addSubGroupTogller;
-    },    
+    },
+    addLinkToglle: state =>{
+      state.addLinkTogller = !state.addLinkTogller;
+    }    
   },
   actions: {   
   },
