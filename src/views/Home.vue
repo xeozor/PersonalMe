@@ -2,18 +2,25 @@
   <div class="main secondary"> 
     <navbar></navbar> 
 
-    <v-btn @click="addModalToggle" v-if="!VissibleSwitch" key="AddModalToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
+    <v-btn @click="addModalToggle" v-if="!VissibleSwitch" key="AddModalToggler"
+     class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
       <v-icon class="add-modal-icon white--text">mdi-plus</v-icon>     
     </v-btn>
 
-    <v-btn @click="addLinkToggle" v-if="VissibleSwitch" key="AddLinkToggler" class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-modal-btn" height="64" width="64" icon>
-      <v-icon class="add-modal-icon white--text">mdi-minus</v-icon>     
+    <v-btn @click="addLinkToggle" v-if="VissibleSwitch" key="AddLinkToggler"
+     class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 add-link-btn" height="64" width="64" icon>
+      <v-icon class="add-modal-icon white--text">mdi-plus</v-icon>     
+    </v-btn>
+
+    <v-btn @click="VissibleSwitch = !VissibleSwitch" v-if ="VissibleSwitch" key="DesktopLink"
+     class="text-center primary rounded-circle d-inline-flex align-center justify-center ma-3 desktop-back-btn" height="64" width="64" icon>
+      <v-icon class="desktop-link-icon white--text">mdi-chevron-left</v-icon>
     </v-btn>
 
     <v-col v-if="!VissibleSwitch" class="link-container mx-auto" key="linkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
       <li v-for="group in groupCol" :key="group.groupId" @click="moveToGroup(group.groupId)"
-       class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
+       class="desktop-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
         <v-icon class="white--text group-icon">{{group.icon}}</v-icon>
         <p class="group-title text-center pt-lg-3 pb-lg-0">{{group.title}}</p>
       </li>
@@ -23,10 +30,10 @@
 
     <v-col v-if="VissibleSwitch" class="link-container mx-auto" key="currentLinkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
-      <li v-for="link in subGroupArr" :key="link.groupId" 
+      <li :to="link.link" v-for="link in subGroupArr" :key="link.groupId" @click="moveToLink(link.link)"     
        class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
         <v-icon class="white--text link-icon">{{link.icon}}</v-icon>
-        <p class="group-title text-center pt-lg-3 pb-lg-0">{{link.title}}</p>
+        <p class="link-title text-center pt-lg-3 pb-lg-0">{{link.title}}</p>
       </li>
       </v-list>
     </v-col>
@@ -62,7 +69,7 @@ export default {
       currentGroup:'',
       subGroupArr:null,
       VissibleSwitch:false,
-      groupSwitch:true,
+      groupSwitch:true,      
     }
   },
   computed:{
@@ -92,9 +99,11 @@ export default {
       }).then(
       this.currentGroup = groupId,
       this.VissibleSwitch = !this.VissibleSwitch
-      );
-               
-    }
+      );               
+    },
+    moveToLink(link){
+      window.open(link, '_blank')
+    }   
     
     /*createCol(){
       this.db.collection('Group').doc(this.groupCol[0].groupId).update({        
@@ -117,17 +126,24 @@ export default {
   width: 100%;
   height: 100%;
 }
-.add-modal-btn{
+.add-modal-btn, .add-link-btn{
   position: absolute;
   bottom:40px;
   left: 40px;
   box-shadow: 0px 4px 35px rgba(32, 242, 91, 0.53)!important;
 }
-.add-modal-icon{
+.desktop-back-btn{
+  position: absolute;  
+  bottom: 120px;
+  left: 40px;
+  box-shadow: 0px 4px 35px rgba(32, 242, 91, 0.53)!important;
+
+}
+.add-modal-icon, .add-link-icon, .desktop-link-icon {
   font-size: 22px;  
 }
 .link-container{
-  margin-top:10vh; 
+  margin-top:14vh; 
   max-width: 83%!important;
   width: 100%;
 }
@@ -135,20 +151,37 @@ export default {
   width: 100%;
   list-style-type: none;
 }
-.link-group{
+.desktop-group{
   box-shadow: 0px 0px 35px rgba(32, 242, 91, 0.53);
   border-radius: 28px;
   width: 14vw;
   height: 14vw;
   position: relative;
+  cursor: pointer;  
+}
+.link-group{
+  box-shadow: 0px 0px 35px rgba(32, 242, 91, 0.53);
+  border-radius: 28px;
+  width: 11vw;
+  height: 11vw;
+  position: relative;
+  cursor: pointer;
 }
 .group-icon{
   font-size: 5vw;
+}
+.link-icon{
+  font-size: 4vw;
 }
 .group-title{
   position: absolute;  
   bottom: 0.85vw;
   font-size: 1.3vw; 
+}
+.link-title{
+  position: absolute;  
+  bottom: 0.55vw;
+  font-size: 1.2vw; 
 }
 #icon-text-input[type = text]{
   font-family: Assistant;
