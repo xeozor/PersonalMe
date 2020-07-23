@@ -19,10 +19,11 @@
 
     <v-col v-if="!VissibleSwitch" class="link-container mx-auto" key="linkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
-      <li v-for="group in groupCol" :key="group.groupId" @click="moveToGroup(group.groupId)"
+      <li v-for="group in groupCol" :key="group.groupId"
        class="desktop-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
-        <v-icon class="white--text group-icon">{{group.icon}}</v-icon>
+        <v-icon @click="moveToGroup(group.groupId)" class="white--text group-icon">{{group.icon}}</v-icon>
         <p class="group-title text-center pt-lg-3 pb-lg-0">{{group.title}}</p>
+        <v-icon class="delete-group" @click="deleteGroup(group.groupId)">mdi-close</v-icon>
       </li>
       </v-list>
     </v-col> 
@@ -30,10 +31,11 @@
 
     <v-col v-if="VissibleSwitch" class="link-container mx-auto" key="currentLinkGroup"> 
       <v-list class="d-flex flex-wrap group-list secondary" dark>     
-      <li :to="link.link" v-for="link in subGroupArr" :key="link.groupId" @click="moveToLink(link.link)"     
+      <li :to="link.link" v-for="link in subGroupArr" :key="link.LinkId"     
        class="link-group d-flex align-center justify-center primary ml-lg-14 ml-md-10 mt-md-4 md-lg-7">        
-        <v-icon class="white--text link-icon">{{link.icon}}</v-icon>
+        <v-icon @click="moveToLink(link.link)" class="white--text link-icon">{{link.icon}}</v-icon>
         <p class="link-title text-center pt-lg-3 pb-lg-0">{{link.title}}</p>
+        <v-icon class="delete-link" @click="deleteLink(link.linkId)">mdi-close</v-icon>
       </li>
       </v-list>
     </v-col>
@@ -67,7 +69,7 @@ export default {
       currentIcon:'mdi-youtube',
       titleTextInput:'',         
       currentGroup:'',
-      subGroupArr:null,
+      subGroupArr:[],
       VissibleSwitch:false,
       groupSwitch:true,      
     }
@@ -76,6 +78,7 @@ export default {
     ...mapGetters([      
       'iconArray',
       'addLinkToggler',
+      'currentGroupId',
     ])    
   },
   methods:{   
@@ -94,22 +97,26 @@ export default {
     this.$store.commit('addModalToggle');        
     },    
     moveToGroup(groupId){
-      this.db.collection('Group').doc(groupId).get().then(doc =>{        
-        this.subGroupArr = doc.data().groupLinks;                
+      this.db.collection('Group').doc(groupId).collection("Links").get().then(snapshot =>{
+        snapshot.forEach(doc => {
+          this.subGroupArr.push({icon: doc.data().icon, title: doc.data().title, link:doc.data().link, linkId:doc.id});
+        })                       
       }).then(
-      this.currentGroup = groupId,
+      this.$store.commit('SetCurrentGroupId', groupId),
       this.VissibleSwitch = !this.VissibleSwitch
       );               
     },
     moveToLink(link){
-      window.open(link, '_blank')
-    }   
+      window.open(link, "_blank")
+    },
+    deleteLink(linkId){
+      this.db.collection('Group').doc(this.currentGroupId).collection('Links').doc(linkId).delete();
+    },
+    deleteGroup(groupId){
+      this.db.collection('Group').doc(groupId).delete();
+    }
     
-    /*createCol(){
-      this.db.collection('Group').doc(this.groupCol[0].groupId).update({        
-        groupLinks: this.fv.arrayUnion({icon:'youtube',title:'Youtube',link:'youtube.com'})
-      })   
-    }*/
+   
   },  
   mounted(){     
     this.db.collection('Group').get().then(snapshot => {      
@@ -157,6 +164,7 @@ export default {
   width: 14vw;
   height: 14vw;
   position: relative;
+  z-index:1050;
   cursor: pointer;  
 }
 .link-group{
@@ -165,6 +173,7 @@ export default {
   width: 11vw;
   height: 11vw;
   position: relative;
+  z-index:1050;
   cursor: pointer;
 }
 .group-icon{
@@ -233,6 +242,18 @@ export default {
 .add-group-btn{
   box-shadow: 0px 0px 35px rgba(32, 242, 91, 0.53)!important;
   border-radius: 20px!important;
+}
+.delete-link{
+  position: absolute;
+  top:-14px;
+  right:-10px;
+  z-index:1051;
+}
+.delete-group{
+  position:absolute;
+  top:-15px;
+  right:-10px;
+  z-index: 1051;
 }
 </style>
 

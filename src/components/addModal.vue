@@ -40,8 +40,7 @@ export default {
   },
   methods:{
     addGroup(){
-      this.db.collection("Group").add({
-      groupLinks:[],
+      this.db.collection("Group").add({      
       icon: this.currentIcon,
       title: this.titleTextInput
     })

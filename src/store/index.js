@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     addModalToggler:false, 
     addLinkToggler:false,
-    addSubGroupToggler:false,     
+    addSubGroupToggler:false,  
+    currentGroupId:'',   
     iconArray:[
       {icon:'mdi-youtube', type:'fab', awesUnic:'&#xf167;'},
       {icon:'mdi-spotify', type:'fab', awesUnic:'&#xf1bc;'},
@@ -43,10 +44,10 @@ export default new Vuex.Store({
     },
     addLinkToggler: state =>{
       return state.addLinkToggler;
-    },    
-    groupCol: state =>{
-      return state.groupCol;
-    },   
+    },
+    currentGroupId: state =>{
+      return state.currentGroupId;
+    }        
   },
   mutations: {
     addModalToggle: state =>{
@@ -54,7 +55,12 @@ export default new Vuex.Store({
     },    
     addLinkToggle: state =>{
       state.addLinkToggler = !state.addLinkToggler;
-    }    
+    },
+    SetCurrentGroupId(state,id){
+      state.currentGroupId = id;
+    }
+
+       
   },
   actions: {   
   },
