@@ -43,7 +43,7 @@ export default {
       this.db.collection("Group").add({      
       icon: this.currentIcon,
       title: this.titleTextInput
-    })
+    }).then()
     this.$store.commit('addModalToggle');        
     },
     setCurrent(ic){

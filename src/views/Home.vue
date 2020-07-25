@@ -87,15 +87,7 @@ export default {
     },    
     addLinkToggle(){
       this.$store.commit('addLinkToggle');
-    },
-    addGroup(){
-      this.db.collection("Group").add({
-      groupLinks:[],
-      icon: this.currentIcon,
-      title: this.titleTextInput
-    })
-    this.$store.commit('addModalToggle');        
-    },    
+    },        
     moveToGroup(groupId){
       this.db.collection('Group').doc(groupId).collection("Links").get().then(snapshot =>{
         snapshot.forEach(doc => {
@@ -110,10 +102,22 @@ export default {
       window.open(link, "_blank")
     },
     deleteLink(linkId){
-      this.db.collection('Group').doc(this.currentGroupId).collection('Links').doc(linkId).delete();
+      this.db.collection('Group').doc(this.currentGroupId).collection('Links').doc(linkId).delete().then(
+        this.db.collection('Group').doc(this.groupId).collection("Links").get().then(snapshot =>{
+        snapshot.forEach(doc => {
+          this.subGroupArr.push({icon: doc.data().icon, title: doc.data().title, link:doc.data().link, linkId:doc.id});
+        })                       
+      })
+      );
     },
     deleteGroup(groupId){
-      this.db.collection('Group').doc(groupId).delete();
+      this.db.collection('Group').doc(groupId).delete().then(
+        this.db.collection('Group').doc(groupId).collection("Links").get().then(snapshot =>{
+        snapshot.forEach(doc => {
+          this.subGroupArr.push({icon: doc.data().icon, title: doc.data().title, link:doc.data().link, linkId:doc.id});
+        })                       
+      })
+      );      
     }
     
    
