@@ -167,8 +167,7 @@ export default {
   border-radius: 28px;
   width: 14vw;
   height: 14vw;
-  position: relative;
-  z-index:1050;
+  position: relative;  
   cursor: pointer;  
 }
 .link-group{
@@ -177,7 +176,6 @@ export default {
   width: 11vw;
   height: 11vw;
   position: relative;
-  z-index:1050;
   cursor: pointer;
 }
 .group-icon{
